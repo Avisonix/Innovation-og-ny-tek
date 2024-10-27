@@ -2,7 +2,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image } from 'react-native';
+import { Image, View, Text } from 'react-native';
+import GlobalStyles from './globalStyles'; // Import Global Styles
 
 // Import your screens
 import HomeScreen from './screens/HomeScreen';
@@ -17,7 +18,7 @@ export default function App() {
       <Tab.Navigator
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarStyle: { height: 60, paddingBottom: 10 },
+          tabBarStyle: GlobalStyles.tabBarStyle, // Use global tab bar style
         }}
       >
         <Tab.Screen 
@@ -27,7 +28,10 @@ export default function App() {
             tabBarIcon: ({ focused }) => (
               <Image
                 source={require('./assets/25694.png')}
-                style={{ width: 30, height: 30, tintColor: focused ? '#007AFF' : '#8e8e93' }}
+                style={[
+                  GlobalStyles.iconStyle, // Use global icon style
+                  { tintColor: focused ? '#007AFF' : '#8e8e93' }
+                ]}
               />
             ),
           }} 
@@ -39,7 +43,10 @@ export default function App() {
             tabBarIcon: ({ focused }) => (
               <Image
                 source={require('./assets/search-icon.png')}
-                style={{ width: 30, height: 30, tintColor: focused ? '#007AFF' : '#8e8e93' }}
+                style={[
+                  GlobalStyles.iconStyle,
+                  { tintColor: focused ? '#007AFF' : '#8e8e93' }
+                ]}
               />
             ),
           }} 
@@ -51,7 +58,10 @@ export default function App() {
             tabBarIcon: ({ focused }) => (
               <Image
                 source={require('./assets/settings-icon.png')}
-                style={{ width: 30, height: 30, tintColor: focused ? '#007AFF' : '#8e8e93' }}
+                style={[
+                  GlobalStyles.iconStyle,
+                  { tintColor: focused ? '#007AFF' : '#8e8e93' }
+                ]}
               />
             ),
           }} 

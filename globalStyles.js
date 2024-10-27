@@ -2,6 +2,7 @@
 import { StyleSheet } from 'react-native';
 
 const GlobalStyles = StyleSheet.create({
+  // Existing styles
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
@@ -56,7 +57,7 @@ const GlobalStyles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
   },
-  
+
   // SearchScreen styles
   searchBarContainer: {
     marginBottom: 20,
@@ -153,6 +154,19 @@ const GlobalStyles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+
+  // New styles for App.js tab bar and icons
+  tabBarStyle: {
+    height: 60,
+    paddingBottom: 10,
+    backgroundColor: '#ffffff',
+    borderTopWidth: 1,
+    borderTopColor: '#dcdcdc',
+  },
+  iconStyle: {
+    width: 30,
+    height: 30,
   },
 });
 
