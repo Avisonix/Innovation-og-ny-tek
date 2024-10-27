@@ -1,9 +1,37 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { getDatabase, ref, query, orderByChild, equalTo, get } from "firebase/database"; // Import Firebase database functions
 import GlobalStyles from '../globalStyles';
+import { database } from '../firebaseConfig'; // Import initialized Firebase database
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  // Function to fetch discounts based on provider
+  const fetchDiscounts = async (provider) => {
+    try {
+      const discountsRef = ref(database, 'discounts'); // Reference to discounts in the database
+      const providerQuery = query(discountsRef, orderByChild('provider'), equalTo(provider)); // Query to filter by provider
+      const snapshot = await get(providerQuery);
+
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const results = Object.keys(data).map(key => ({
+          id: key,
+          title: data[key].description,
+          details: data[key].details,
+        }));
+        setSearchResults(results);
+      } else {
+        setSearchResults([]);
+        Alert.alert("No results found", `No discounts found for provider: ${provider}`);
+      }
+    } catch (error) {
+      console.error("Error fetching discounts:", error);
+      Alert.alert("Error", "Failed to fetch discounts. Please try again.");
+    }
+  };
 
   return (
     <ScrollView style={GlobalStyles.container}>
@@ -21,13 +49,13 @@ export default function SearchScreen() {
       <View style={GlobalStyles.recentSearchesContainer}>
         <Text style={GlobalStyles.sectionTitle}>Recent Searches</Text>
         <View style={GlobalStyles.recentSearchButtons}>
-          <TouchableOpacity style={GlobalStyles.chip}>
+          <TouchableOpacity style={GlobalStyles.chip} onPress={() => fetchDiscounts("CreditCard")}>
             <Text style={GlobalStyles.chipText}>Credit Card Offers</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={GlobalStyles.chip}>
+          <TouchableOpacity style={GlobalStyles.chip} onPress={() => fetchDiscounts("Workplace")}>
             <Text style={GlobalStyles.chipText}>Workplace Discounts</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={GlobalStyles.chip}>
+          <TouchableOpacity style={GlobalStyles.chip} onPress={() => fetchDiscounts("Profile")}>
             <Text style={GlobalStyles.chipText}>Profile Updates</Text>
           </TouchableOpacity>
         </View>
@@ -36,25 +64,16 @@ export default function SearchScreen() {
       {/* Search Results */}
       <View style={GlobalStyles.searchResultsContainer}>
         <Text style={GlobalStyles.sectionTitle}>Search Results</Text>
-        {/* Sample Search Results */}
-        <View style={GlobalStyles.resultCard}>
-          <Text style={GlobalStyles.resultTitle}>Discount on Electronics</Text>
-          <Text style={GlobalStyles.resultDescription}>
-            Get up to 20% off on electronics at participating stores.
-          </Text>
-        </View>
-        <View style={GlobalStyles.resultCard}>
-          <Text style={GlobalStyles.resultTitle}>Clothing Discounts</Text>
-          <Text style={GlobalStyles.resultDescription}>
-            Exclusive offers on clothing brands for members.
-          </Text>
-        </View>
-        <View style={GlobalStyles.resultCard}>
-          <Text style={GlobalStyles.resultTitle}>Travel Deals</Text>
-          <Text style={GlobalStyles.resultDescription}>
-            Special discounts on travel packages for work and leisure.
-          </Text>
-        </View>
+        {searchResults.length > 0 ? (
+          searchResults.map((result) => (
+            <View key={result.id} style={GlobalStyles.resultCard}>
+              <Text style={GlobalStyles.resultTitle}>{result.title}</Text>
+              <Text style={GlobalStyles.resultDescription}>{result.details}</Text>
+            </View>
+          ))
+        ) : (
+          <Text style={GlobalStyles.resultDescription}>No results found</Text>
+        )}
       </View>
     </ScrollView>
   );
