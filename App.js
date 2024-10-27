@@ -2,13 +2,20 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
+import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
+import firebaseConfig from './firebaseConfig'; // Import your Firebase config
 
-// Importer dine skærme
+// Import your screens
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
-// Opret en Bottom Tab Navigator
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app); // Initialize the database
+
+// Create a Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -16,8 +23,8 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
-          tabBarShowLabel: false, // Skjuler tekstlabel
-          tabBarStyle: { height: 60, paddingBottom: 10 }, // Tilpasning af tab-bar
+          tabBarShowLabel: false, // Hide text labels
+          tabBarStyle: { height: 60, paddingBottom: 10 }, // Customize tab bar
         }}
       >
         <Tab.Screen 
@@ -26,7 +33,7 @@ export default function App() {
           options={{
             tabBarIcon: ({ focused }) => (
               <Image
-                source={require('./assets/25694.png')} // Udskift med din home-ikon
+                source={require('./assets/25694.png')} // Replace with your home icon
                 style={{ width: 30, height: 30, tintColor: focused ? '#007AFF' : '#8e8e93' }}
               />
             ),
@@ -38,7 +45,7 @@ export default function App() {
           options={{
             tabBarIcon: ({ focused }) => (
               <Image
-                source={require('./assets/search-icon.png')} // Udskift med din search-ikon
+                source={require('./assets/search-icon.png')} // Replace with your search icon
                 style={{ width: 30, height: 30, tintColor: focused ? '#007AFF' : '#8e8e93' }}
               />
             ),
@@ -50,7 +57,7 @@ export default function App() {
           options={{
             tabBarIcon: ({ focused }) => (
               <Image
-                source={require('./assets/settings-icon.png')} // Udskift med din settings-ikon
+                source={require('./assets/settings-icon.png')} // Replace with your settings icon
                 style={{ width: 30, height: 30, tintColor: focused ? '#007AFF' : '#8e8e93' }}
               />  
             ),

@@ -1,106 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react'; 
+import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, get, child } from "firebase/database"; // Import necessary functions
+import firebaseConfig from '../firebaseConfig'; // Adjust the path to your Firebase config
+import GlobalStyles from '../globalStyles';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app); // Initialize the database
 
 export default function HomeScreen() {
   const [discountData, setDiscountData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Henter data fra en dummy API
-    fetch('https://jsonplaceholder.typicode.com/posts?_limit=6')
-      .then((response) => response.json())
-      .then((data) => {
-        // Map API data til en discount-struktur
-        const mappedData = data.map((item) => ({
-          id: item.id.toString(),
-          title: item.title.substring(0, 15) + '...', // Begrænser længden af titlen
-          icon: require('../assets/icon.png'),
-        }));
-        setDiscountData(mappedData);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null); // Reset error message before fetching
+      try {
+        const dbRef = ref(database);
+        const snapshot = await get(child(dbRef, 'discounts')); // Assuming 'discounts' is your data path
+
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const mappedData = Object.keys(data).map((key) => ({
+            id: key,
+            title: data[key].description,
+            icon: require('../assets/icon.png'), // Replace with your actual icon path
+          }));
+          setDiscountData(mappedData);
+        } else {
+          console.log("No data available");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Failed to load discounts. Please try again later.");
+        Alert.alert("Error", "Failed to load discounts. Please try again later.");
+      } finally {
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card}>
-      <View style={styles.iconContainer}>
-        <Image source={item.icon} style={styles.icon} />
+    <TouchableOpacity style={GlobalStyles.card}>
+      <View style={GlobalStyles.iconContainer}>
+        <Image source={item.icon} style={GlobalStyles.icon} />
       </View>
-      <Text style={styles.cardText}>{item.title}</Text>
+      <Text style={GlobalStyles.cardText}>{item.title}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Oversigt</Text>
+    <View style={GlobalStyles.container}>
+      <Text style={GlobalStyles.headerText}>Oversigt</Text>
       {loading ? (
         <ActivityIndicator size="large" color="#007AFF" />
+      ) : error ? (
+        <Text style={GlobalStyles.errorText}>{error}</Text>
       ) : (
         <FlatList
           data={discountData}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           numColumns={2}
-          contentContainerStyle={styles.grid}
+          contentContainerStyle={GlobalStyles.grid}
           showsVerticalScrollIndicator={false}
         />
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9f9f9',
-    paddingHorizontal: 16,
-    paddingTop: 20,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    alignSelf: 'center',
-    color: '#333',
-  },
-  grid: {
-    alignItems: 'center',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    margin: 10,
-    padding: 20,
-    width: 140,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#FF6F00',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  icon: {
-    width: 40,
-    height: 40,
-    tintColor: '#fff',
-  },
-  cardText: {
-    textAlign: 'center',
-    color: '#555',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-});
