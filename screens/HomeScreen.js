@@ -1,13 +1,9 @@
+// HomeScreen.js
 import React, { useEffect, useState } from 'react'; 
 import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get, child } from "firebase/database"; // Import necessary functions
-import firebaseConfig from '../firebaseConfig'; // Adjust the path to your Firebase config
+import { ref, get, child } from "firebase/database"; // Import necessary functions
+import { database } from '../firebaseConfig'; // Import the already-initialized database
 import GlobalStyles from '../globalStyles';
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app); // Initialize the database
 
 export default function HomeScreen() {
   const [discountData, setDiscountData] = useState([]);
@@ -17,7 +13,7 @@ export default function HomeScreen() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      setError(null); // Reset error message before fetching
+      setError(null);
       try {
         const dbRef = ref(database);
         const snapshot = await get(child(dbRef, 'discounts')); // Assuming 'discounts' is your data path
@@ -27,7 +23,7 @@ export default function HomeScreen() {
           const mappedData = Object.keys(data).map((key) => ({
             id: key,
             title: data[key].description,
-            icon: require('../assets/icon.png'), // Replace with your actual icon path
+            icon: require('../assets/icon.png'),
           }));
           setDiscountData(mappedData);
         } else {
