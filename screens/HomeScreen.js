@@ -1,14 +1,16 @@
 // HomeScreen.js
 import React, { useEffect, useState } from 'react'; 
 import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
-import { ref, get, child } from "firebase/database"; // Import necessary functions
-import { database } from '../firebaseConfig'; // Import the already-initialized database
+import { ref, get, child } from "firebase/database";
+import { useNavigation } from '@react-navigation/native';
+import { database } from '../firebaseConfig';
 import GlobalStyles from '../globalStyles';
 
 export default function HomeScreen() {
   const [discountData, setDiscountData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,14 +18,17 @@ export default function HomeScreen() {
       setError(null);
       try {
         const dbRef = ref(database);
-        const snapshot = await get(child(dbRef, 'discounts')); // Assuming 'discounts' is your data path
+        const snapshot = await get(child(dbRef, 'discounts'));
 
         if (snapshot.exists()) {
           const data = snapshot.val();
           const mappedData = Object.keys(data).map((key) => ({
             id: key,
-            title: data[key].description,
-            icon: require('../assets/icon.png'),
+            title: data[key].description, // Use description as title
+            icon: require('../assets/icon.png'), // Icon path
+            description: data[key].long_description, // Long description for detail screen
+            conditions: data[key].conditions, // Conditions for detail screen
+            link: data[key].link, // Referral link
           }));
           setDiscountData(mappedData);
         } else {
@@ -42,7 +47,10 @@ export default function HomeScreen() {
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={GlobalStyles.card}>
+    <TouchableOpacity 
+      style={GlobalStyles.card} 
+      onPress={() => navigation.navigate("DiscountDetail", { discount: item })} // Pass item data to DiscountDetailScreen
+    >
       <View style={GlobalStyles.iconContainer}>
         <Image source={item.icon} style={GlobalStyles.icon} />
       </View>
