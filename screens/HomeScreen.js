@@ -25,10 +25,7 @@ export default function HomeScreen() {
           const mappedData = Object.keys(data).map((key) => ({
             id: key,
             title: data[key].description, // Use description as title
-            icon: require('../assets/icon.png'), // Icon path
-            description: data[key].long_description, // Long description for detail screen
-            conditions: data[key].conditions, // Conditions for detail screen
-            link: data[key].link, // Referral link
+            icon: require('../assets/icon.png'), // Path to your icon
           }));
           setDiscountData(mappedData);
         } else {
@@ -49,7 +46,7 @@ export default function HomeScreen() {
   const renderItem = ({ item }) => (
     <TouchableOpacity 
       style={GlobalStyles.card} 
-      onPress={() => navigation.navigate("DiscountDetail", { discount: item })} // Pass item data to DiscountDetailScreen
+      onPress={() => navigation.navigate("DiscountDetail", { discountId: item.id })} // Pass only the discountId
     >
       <View style={GlobalStyles.iconContainer}>
         <Image source={item.icon} style={GlobalStyles.icon} />
