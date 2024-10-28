@@ -4,7 +4,7 @@ import { View, Text, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { ref, get, child } from "firebase/database";
-import { database } from '../firebaseConfig'; // Import your initialized Firebase database
+import { database } from '../firebaseConfig'; 
 import GlobalStyles from '../globalStyles';
 
 export default function MapScreen() {

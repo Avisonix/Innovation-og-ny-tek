@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { getDatabase, ref, query, orderByChild, equalTo, get } from "firebase/database"; // Import Firebase database functions
 import GlobalStyles from '../globalStyles';
-import { database } from '../firebaseConfig'; // Import initialized Firebase database
+import { database } from '../firebaseConfig';
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
