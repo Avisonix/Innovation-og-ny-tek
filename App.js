@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import DiscountDetailScreen from './screens/DiscountDetailScreen';
+import BrandDetailScreen from './screens/BrandDetailSceen';
 import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import MapScreen from './screens/MapScreen';
@@ -14,7 +15,7 @@ import GlobalStyles from './globalStyles';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-// Define HomeStack with HomeScreen and DiscountDetailScreen
+// Define HomeStack with HomeScreen, DiscountDetailScreen, and BrandDetailScreen
 function HomeStack() {
   return (
     <Stack.Navigator>
@@ -27,6 +28,11 @@ function HomeStack() {
         name="DiscountDetail" 
         component={DiscountDetailScreen} 
         options={{ title: 'Discount Details' }} // Header title for DiscountDetailScreen
+      />
+      <Stack.Screen 
+        name="BrandDetail" 
+        component={BrandDetailScreen} 
+        options={{ title: 'Brand Details' }} // Header title for BrandDetailScreen
       />
     </Stack.Navigator>
   );
