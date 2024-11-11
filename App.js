@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import DiscountDetailScreen from './screens/DiscountDetailScreen';
 import BrandDetailScreen from './screens/BrandDetailSceen';
+import NewDiscountsScreen from './screens/NewDiscountsSceen'
 import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import MapScreen from './screens/MapScreen';
@@ -15,24 +16,28 @@ import GlobalStyles from './globalStyles';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-// Define HomeStack with HomeScreen, DiscountDetailScreen, and BrandDetailScreen
 function HomeStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen 
-        name="Home" 
-        component={HomeScreen} 
-        options={{ headerShown: false }} // Hide header for HomeScreen
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen 
-        name="DiscountDetail" 
-        component={DiscountDetailScreen} 
-        options={{ title: 'Discount Details' }} // Header title for DiscountDetailScreen
+      <Stack.Screen
+        name="DiscountDetail"
+        component={DiscountDetailScreen}
+        options={{ title: 'Discount Details' }}
       />
-      <Stack.Screen 
-        name="BrandDetail" 
-        component={BrandDetailScreen} 
-        options={{ title: 'Brand Details' }} // Header title for BrandDetailScreen
+      <Stack.Screen
+        name="BrandDetail"
+        component={BrandDetailScreen}
+        options={{ title: 'Brand Details' }}
+      />
+      <Stack.Screen
+        name="NewDiscounts"
+        component={NewDiscountsScreen}
+        options={{ title: 'Nye Rabatter' }}
       />
     </Stack.Navigator>
   );
@@ -49,7 +54,7 @@ export default function App() {
       >
         <Tab.Screen
           name="HomeTab"
-          component={HomeStack} // Use HomeStack instead of HomeScreen
+          component={HomeStack}
           options={{
             tabBarIcon: ({ focused }) => (
               <Image

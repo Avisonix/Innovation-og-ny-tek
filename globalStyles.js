@@ -224,6 +224,14 @@ const GlobalStyles = StyleSheet.create({
     width: 30,
     height: 30,
   },
+  smallLogo: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+    borderRadius: 5,
+  },
+  
+  
 });
 
 export default GlobalStyles;

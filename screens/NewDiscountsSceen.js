@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet, Image, Button } from 'react-native';
 import GlobalStyles from '../globalStyles';
 
-export default function BrandDetailScreen({ route }) {
-  const { brand } = route.params;
+export default function NewDiscountsScreen({ route }) {
+  const { discounts } = route.params; // Hent rabatter fra navigationen
 
   const renderDiscount = ({ item }) => (
     <View style={GlobalStyles.discountCard}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Image source={{ uri: brand.logo }} style={GlobalStyles.smallLogo} />
+        <Image source={{ uri: item.logo }} style={GlobalStyles.smallLogo} />
         <Text style={GlobalStyles.discountTitle}>{item.description}</Text>
       </View>
       <Text style={GlobalStyles.discountCondition}>{item.conditions}</Text>
@@ -20,10 +20,10 @@ export default function BrandDetailScreen({ route }) {
 
   return (
     <View style={GlobalStyles.container}>
-      <Text style={GlobalStyles.headerText}>{brand.brandName}</Text>
+      <Text style={GlobalStyles.headerText}>Nye Rabatter</Text>
 
       <FlatList
-        data={Object.values(brand.discounts)} // Konverter discounts til en array
+        data={discounts}
         renderItem={renderDiscount}
         keyExtractor={(item, index) => index.toString()}
       />

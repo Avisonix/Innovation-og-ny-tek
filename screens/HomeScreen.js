@@ -1,4 +1,3 @@
-// HomeScreen.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { ref, get, child } from 'firebase/database';
@@ -8,7 +7,7 @@ import GlobalStyles from '../globalStyles';
 
 export default function HomeScreen() {
   const [brands, setBrands] = useState([]);
-  const [newDiscountsCount, setNewDiscountsCount] = useState(0);
+  const [newDiscounts, setNewDiscounts] = useState([]); // Nye rabatter
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
@@ -25,7 +24,7 @@ export default function HomeScreen() {
           const data = snapshot.val();
 
           const brandData = {};
-          let newDiscounts = 0;
+          const newDiscountList = [];
 
           Object.keys(data).forEach((key) => {
             const discount = data[key];
@@ -34,20 +33,21 @@ export default function HomeScreen() {
             if (!brandData[brand]) {
               brandData[brand] = {
                 brandName: brand,
-                logo: discount.logo || 'https://example.com/default-logo.png',
+                logo: discount.logo || 'https://example.com/default-logo.png', // Standard logo
                 discounts: [],
               };
             }
 
             brandData[brand].discounts.push(discount);
 
+            // Hvis isNew er sand, tilføj til "nye rabatter"
             if (discount.isNew) {
-              newDiscounts += 1;
+              newDiscountList.push({ ...discount, logo: brandData[brand].logo });
             }
           });
 
-          setBrands(Object.values(brandData));
-          setNewDiscountsCount(newDiscounts);
+          setBrands(Object.values(brandData)); // Lav en liste af brands
+          setNewDiscounts(newDiscountList); // Gem listen af nye rabatter
         }
       } catch (error) {
         setError('Failed to load discounts. Please try again later.');
@@ -71,14 +71,29 @@ export default function HomeScreen() {
     </TouchableOpacity>
   );
 
+  const renderNewDiscount = ({ item }) => (
+    <View style={GlobalStyles.discountCard}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Image source={{ uri: item.logo }} style={GlobalStyles.smallLogo} />
+        <Text style={GlobalStyles.discountTitle}>{item.description}</Text>
+      </View>
+      <Text style={GlobalStyles.discountCondition}>{item.conditions}</Text>
+    </View>
+  );
+
   return (
     <View style={GlobalStyles.container}>
-      <TouchableOpacity style={GlobalStyles.newDiscountBox}>
+      {/* Boks med nye rabatter */}
+      <TouchableOpacity
+        style={GlobalStyles.newDiscountBox}
+        onPress={() => navigation.navigate('NewDiscounts', { discounts: newDiscounts })} // Naviger til NewDiscountsScreen
+      >
         <Text style={GlobalStyles.newDiscountText}>
-          NYT! Vi har registreret {newDiscountsCount} nye rabatkoder. Tryk her for at se.
+          NYT! Vi har registreret {newDiscounts.length} nye rabatkoder. Tryk her for at se.
         </Text>
       </TouchableOpacity>
 
+      {/* Liste over brands */}
       {loading ? (
         <ActivityIndicator size="large" color="#007AFF" />
       ) : error ? (
