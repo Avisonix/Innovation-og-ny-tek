@@ -1,8 +1,7 @@
-// GlobalStyles.js
 import { StyleSheet } from 'react-native';
 
 const GlobalStyles = StyleSheet.create({
-  // Existing styles
+  // Eksisterende styles
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
@@ -154,6 +153,63 @@ const GlobalStyles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+
+  // HomeScreen styles
+  newDiscountBox: {
+    backgroundColor: '#FFFBCC',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  newDiscountText: {
+    fontSize: 14,
+    color: '#333',
+    textAlign: 'center',
+  },
+  brandGrid: {
+    justifyContent: 'space-between',
+  },
+  brandCard: {
+    width: 100,
+    alignItems: 'center',
+    margin: 10,
+  },
+  brandLogo: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    marginBottom: 5,
+  },
+  brandText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  discountCount: {
+    fontSize: 10,
+    color: '#666',
+    textAlign: 'center',
+  },
+
+  // BrandDetailScreen styles
+  discountCard: {
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    borderColor: '#ddd',
+    borderWidth: 1,
+  },
+  discountTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#333',
+  },
+  discountCondition: {
+    fontSize: 14,
+    color: '#666',
   },
 
   // New styles for App.js tab bar and icons

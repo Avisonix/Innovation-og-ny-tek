@@ -1,15 +1,15 @@
 // BrandDetailScreen.js
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import GlobalStyles from '../globalStyles';
 
 export default function BrandDetailScreen({ route }) {
-  const { brand } = route.params; // Modtag brand-data fra navigationen
+  const { brand } = route.params;
 
   const renderDiscount = ({ item }) => (
-    <View style={styles.discountCard}>
-      <Text style={styles.discountTitle}>{item.description}</Text>
-      <Text style={styles.discountCondition}>{item.conditions}</Text>
+    <View style={GlobalStyles.discountCard}>
+      <Text style={GlobalStyles.discountTitle}>{item.description}</Text>
+      <Text style={GlobalStyles.discountCondition}>{item.conditions}</Text>
     </View>
   );
 
@@ -25,24 +25,3 @@ export default function BrandDetailScreen({ route }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  discountCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    borderColor: '#ddd',
-    borderWidth: 1,
-  },
-  discountTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    color: '#333',
-  },
-  discountCondition: {
-    fontSize: 14,
-    color: '#666',
-  },
-});
