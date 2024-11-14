@@ -42,7 +42,7 @@ function HomeStack() {
     </Stack.Navigator>
   );
 }
-
+//kommentar
 export default function App() {
   return (
     <NavigationContainer>
