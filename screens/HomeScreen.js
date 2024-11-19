@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
-import { ref, get, child } from 'firebase/database';
+import { ref, get, child,update } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
-import { database } from '../firebaseConfig';
+import { auth,database } from '../firebaseConfig';
 import GlobalStyles from '../globalStyles';
+import userHandler from '../dataHandlers/userHandler'; // Importer userHandler funktionerne
 
 export default function HomeScreen() {
   const [brands, setBrands] = useState([]);
@@ -18,8 +19,11 @@ export default function HomeScreen() {
       setError(null);
       try {
         const dbRef = ref(database);
+        const uid = await userHandler.getUID(auth).then((uid) => {return uid}); // Hent UID
+        // Hent bruger fra realtime databasen
+        const user = await userHandler.getUserByUid({get, child, dbRef, uid}).then((user) => {return user});
+        
         const snapshot = await get(child(dbRef, 'discounts'));
-
         if (snapshot.exists()) {
           const data = snapshot.val();
 

@@ -6,7 +6,10 @@ import {
     StyleSheet,
 } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { ref,set, child } from 'firebase/database';
+import { database } from '../firebaseConfig';
 import { useState } from 'react';
+import userhandler from '../dataHandlers/userHandler';
 
 function SignUpForm() {
     const [email, setEmail] = useState('');
@@ -14,19 +17,22 @@ function SignUpForm() {
     const [errorMessage, setErrorMessage] = useState(null);
 
     const auth = getAuth();
-
+    const dbRef = ref(database);
     const handleSubmit = async () => {
-        await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            // Handle user signup
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            setErrorMessage(`${errorCode}: ${errorMessage}`);
-        });
+    
+            // Ensure `addUser` is awaited
+            await userhandler.addUser({ set, child, dbRef, uid: user.uid });
+    
+            console.log("User signup and database addition successful");
+        } catch (error) {
+            console.error("Error during signup:", error);
+            setErrorMessage(`${error.code}: ${error.message}`);
+        }
     };
+    
 
     const renderButton = () => {
         return <Button onPress={() => handleSubmit()} title="Create user" color="#FF6F00" />;
