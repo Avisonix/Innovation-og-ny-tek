@@ -40,6 +40,7 @@ exports.addUser = async ({ set, child, dbRef, uid }) => {
 // returns all offers for a user with a given id
 //Todo
 exports.getAllOfferForId = (users, uid) => {
+    
 }
 
 exports.addOfferToUser = async ({ref,get,child,update, database , uid, offer }) => {
@@ -65,6 +66,10 @@ exports.addOfferToUser = async ({ref,get,child,update, database , uid, offer }) 
     }
 };
 
+exports.createNewOffer = ()=> {
+
+}
 //todo
 exports.removeOfferFromUser = (users, uid, offerId) => {
+
 }
