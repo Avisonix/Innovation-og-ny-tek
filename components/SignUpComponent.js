@@ -23,7 +23,7 @@ function SignUpForm() {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
     
-            // Ensure `addUser` is awaited
+            //function to add user to database for offer storing
             await userhandler.addUser({ set, child, dbRef, uid: user.uid });
     
             console.log("User signup and database addition successful");

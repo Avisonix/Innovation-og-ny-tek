@@ -4,11 +4,11 @@ import { ref, get, child,update } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import { auth,database } from '../firebaseConfig';
 import GlobalStyles from '../globalStyles';
-import userHandler from '../dataHandlers/userHandler'; // Importer userHandler funktionerne
+import userHandler from '../dataHandlers/userHandler'; // adskilt datahåndtering da dokumentet er stort
 
 export default function HomeScreen() {
   const [brands, setBrands] = useState([]);
-  const [newDiscounts, setNewDiscounts] = useState([]); // Nye rabatter
+  const [newDiscounts, setNewDiscounts] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigation = useNavigation();
@@ -19,16 +19,21 @@ export default function HomeScreen() {
       setError(null);
       try {
         const dbRef = ref(database);
+
+        // Hent brugerens UID
         const uid = await userHandler.getUID(auth).then((uid) => {return uid});
-        // Hent bruger fra realtime databasen
+
+        // Returernerer et array med brugerens tilbud
         const userOffers = await userHandler.getUserByUid({get, child, dbRef, uid}).then((user) => {return user.offers});
+
+        //henter alle tilbud
         const snapshot = await get(child(dbRef, 'discounts'));
         if (snapshot.exists()) {
           const data = snapshot.val();
 
           const brandData = {};
           const newDiscountList = [];
-
+          //loop igennem alle tilbud
           Object.keys(data).forEach((key) => {
             const discount = data[key];
             const brand = discount.brand || 'Unknown';
@@ -40,14 +45,16 @@ export default function HomeScreen() {
                 discounts: [],
               };
             }
+            // Hvis tilbuddet er i brugerens tilbud, tilføj til brandData, som er det der vises på forsiden
             if(discount.id in userOffers){
             brandData[brand].discounts.push(discount);
+            // Hvis isNew er sand, tilføj til "nye rabatter"
             if (discount.isNew) {
               newDiscountList.push({ ...discount, logo: brandData[brand].logo });
             }
             }
 
-            // Hvis isNew er sand, tilføj til "nye rabatter"
+
             
           
           });

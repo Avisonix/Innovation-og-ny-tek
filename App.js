@@ -11,8 +11,8 @@ import NewDiscountsScreen from './screens/NewDiscountsSceen';
 import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import MapScreen from './screens/MapScreen';
-import AuthScreen from './screens/AuthScreen'; // Tilføjet AuthScreen import
-import { auth } from './firebaseConfig'; // Importer auth fra firebaseConfig
+import AuthScreen from './screens/AuthScreen'; 
+import { auth } from './firebaseConfig'; 
 import GlobalStyles from './globalStyles';
 
 const Tab = createBottomTabNavigator();

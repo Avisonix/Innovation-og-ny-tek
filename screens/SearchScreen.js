@@ -10,12 +10,16 @@ export default function SearchScreen() {
   const [discountAmount, setDiscountAmount] = useState(''); // For discount amount filtering
   const [searchResults, setSearchResults] = useState([]);
 
+  // stadig WIP og mangler at blive færdigt
+
+  
   // Function to fetch discounts based on criteria
   const fetchDiscounts = async () => {
     try {
       const discountsRef = ref(database, 'discounts');
       let filteredQuery = discountsRef;
 
+      
       // Determine the search criteria
       if (searchQuery) {
         filteredQuery = query(discountsRef, orderByChild('brand'), equalTo(searchQuery));

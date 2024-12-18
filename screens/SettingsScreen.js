@@ -3,7 +3,7 @@ import { View, Text, Switch, ScrollView, TouchableOpacity } from 'react-native';
 import GlobalStyles from '../globalStyles';
 import { signOut } from 'firebase/auth';
 import { auth, database } from '../firebaseConfig'; 
-//import { setShouldAnimateExitingForTag } from 'react-native-reanimated/lib/typescript/core';
+
 
 export default function SettingsScreen({ navigation }) {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(false);

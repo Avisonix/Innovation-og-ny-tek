@@ -26,7 +26,7 @@ exports.getUserByUid = async ({ get, child, dbRef, uid }) => {
         throw new Error(`User with uid ${uid} not found`);
     }
 };
-//add a new user to the database on uid
+//add a new user to the database on uid for storing offers by user id
 exports.addUser = async ({ set, child, dbRef, uid }) => {
     console.log(1);
     const user = { 
@@ -43,6 +43,8 @@ exports.getAllOfferForId = (users, uid) => {
     
 }
 
+
+//Function works but not implementet in the app yet
 exports.addOfferToUser = async ({ref,get,child,update, database , uid, offer }) => {
     try {
         const userRef = ref(database , `users/${uid}`);
