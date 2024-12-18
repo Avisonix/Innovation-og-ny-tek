@@ -19,9 +19,9 @@ export default function HomeScreen() {
       setError(null);
       try {
         const dbRef = ref(database);
-        const uid = await userHandler.getUID(auth).then((uid) => {return uid}); // Hent UID
+        const uid = await userHandler.getUID(auth).then((uid) => {return uid});
         // Hent bruger fra realtime databasen
-        const user = await userHandler.getUserByUid({get, child, dbRef, uid}).then((user) => {return user});
+        const userOffers = await userHandler.getUserByUid({get, child, dbRef, uid}).then((user) => {return user.offers});
         const snapshot = await get(child(dbRef, 'discounts'));
         if (snapshot.exists()) {
           const data = snapshot.val();
@@ -40,15 +40,17 @@ export default function HomeScreen() {
                 discounts: [],
               };
             }
-
+            if(discount.id in userOffers){
             brandData[brand].discounts.push(discount);
-
-            // Hvis isNew er sand, tilføj til "nye rabatter"
             if (discount.isNew) {
               newDiscountList.push({ ...discount, logo: brandData[brand].logo });
             }
-          });
+            }
 
+            // Hvis isNew er sand, tilføj til "nye rabatter"
+            
+          
+          });
           setBrands(Object.values(brandData)); // Lav en liste af brands
           setNewDiscounts(newDiscountList); // Gem listen af nye rabatter
         }

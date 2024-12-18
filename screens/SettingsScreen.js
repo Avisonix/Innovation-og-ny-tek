@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity } from 'react-native';
 import GlobalStyles from '../globalStyles';
-import { getAuth, signOut } from 'firebase/auth';
-import userHandler from '../dataHandlers/userHandler'; // Importer userHandler funktionerne
+import { signOut } from 'firebase/auth';
+import { auth, database } from '../firebaseConfig'; 
 //import { setShouldAnimateExitingForTag } from 'react-native-reanimated/lib/typescript/core';
 
 export default function SettingsScreen({ navigation }) {
@@ -26,21 +26,6 @@ export default function SettingsScreen({ navigation }) {
   const handleAdPreferencesToggle = () => {
     setAdPreferencesEnabled(!adPreferencesEnabled);
   };
-
-  const addOfferToUser = () => {
-    //henter boxes fra front end
-
-    //henter alle
-
-    //kalder funktion der tilføjer til user i db
-    //await userHandler.addOfferToUser({ref, get, child, update, database, uid, offer: /*indsæt offerID*/}).then((result) => {return result});
-  }
-  const addNewOfferToDatabase = () => {
-    //henter info fra front end
-
-    //kalder funktion der tilføjer til db
-  }
-  const auth = getAuth();
 
   const handleSignOut = () => {
     signOut(auth)
