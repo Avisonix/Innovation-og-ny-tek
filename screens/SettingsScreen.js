@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, Switch, ScrollView, TouchableOpacity } from 'react-native';
 import GlobalStyles from '../globalStyles';
+import { getAuth, signOut } from 'firebase/auth';
 import userHandler from '../dataHandlers/userHandler'; // Importer userHandler funktionerne
-import { setShouldAnimateExitingForTag } from 'react-native-reanimated/lib/typescript/core';
+//import { setShouldAnimateExitingForTag } from 'react-native-reanimated/lib/typescript/core';
 
 export default function SettingsScreen({ navigation }) {
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(false);
@@ -32,13 +33,26 @@ export default function SettingsScreen({ navigation }) {
     //henter alle
 
     //kalder funktion der tilføjer til user i db
-    await userHandler.addOfferToUser({ref, get, child, update, database, uid, offer: /*indsæt offerID*/}).then((result) => {return result});
+    //await userHandler.addOfferToUser({ref, get, child, update, database, uid, offer: /*indsæt offerID*/}).then((result) => {return result});
   }
   const addNewOfferToDatabase = () => {
     //henter info fra front end
 
     //kalder funktion der tilføjer til db
   }
+  const auth = getAuth();
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("press")
+        alert('Signed Out', 'You have been signed out successfully.');
+        // Navigate to the login screen or any other appropriate screen
+      })
+      .catch((error) => {
+        alert('Error', error.message);
+      });
+  };
 
   return (
     <View style={GlobalStyles.container}>
@@ -87,6 +101,10 @@ export default function SettingsScreen({ navigation }) {
         {/* Save Changes Button */}
         <TouchableOpacity style={GlobalStyles.saveButton} onPress={() => alert('Changes Saved!')}>
           <Text style={GlobalStyles.saveButtonText}>Save Changes</Text>
+        </TouchableOpacity>
+        {/*sign out button*/}
+        <TouchableOpacity style={GlobalStyles.saveButton} onPress={handleSignOut}>
+          <Text style={GlobalStyles.saveButtonText}>Sign Out</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
